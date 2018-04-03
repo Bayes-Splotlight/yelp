@@ -1,0 +1,23 @@
+---
+title: "Bayesian Project"
+author: "Zhuoqin Ma"
+date: "4/2/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#  Add Sentiment Column
+dtm <- read.csv("dtm.csv", as.is=T, head=T)
+
+dtm[, 193] <- rep("Positive", nrow(dtm))
+dtm$Sentiment[dtm$stars_y==3] <- "Neutral"
+dtm$Sentiment[dtm$stars_y<3] <- "Negative"
+
+colnames(dtm)[193] <- "Sentiment"
+head(dtm, 20)[, "Sentiment"]
+```
+
