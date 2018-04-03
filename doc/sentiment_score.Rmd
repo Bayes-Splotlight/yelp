@@ -1,0 +1,38 @@
+---
+title: "sentiment_score"
+author: "Xiaoxiao Guo"
+date: "4/1/2018"
+output: pdf_document
+---
+
+## Sentiment Analysis (Positive or Negtive) 
+```{r, message=FALSE, warning=FALSE}
+library("RSentiment")
+dtm <- read.csv("../output/dtm.csv")
+freq <- colSums(as.matrix(dtm))
+
+sentiments <- calculate_sentiment(names(freq))
+sentiments <- cbind(sentiments, as.data.frame(freq))
+sent_pos <- sentiments[sentiments$sentiment == "Positive", ]
+sent_pos <- na.omit(sent_pos)
+sent_neg <- sentiments[sentiments$sentiment == "Negative", ]
+sent_neu <- sentiments[sentiments$sentiment == "Neutral", ] 
+
+cat("We have far lower negative Sentiments: ",sum(sent_neg$freq)," than positive: ",sum(sent_pos$freq))
+```
+
+## Draw the Wordclouds
+```{r, fig.height=3, fig.width=6}
+library("wordcloud")
+library("RColorBrewer")
+# Wordcloud for positive words
+set.seed(100)
+# Positive Cloud
+
+par(mfrow = c(1, 2))
+wordcloud(sent_pos$text, sent_pos$freq, min.freq = 10, max.words = 100, colors=brewer.pal(6,"Dark2"))
+
+# Negative Cloud
+wordcloud(sent_neg$text, sent_neg$freq, min.freq = 10, max.words = 100, colors=brewer.pal(6,"Dark2"))
+```
+
