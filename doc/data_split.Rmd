@@ -1,0 +1,24 @@
+---
+title: "data_split"
+author: "Jiaxi Wu"
+date: "April 3, 2018"
+output: pdf_document
+---
+
+## Split the data as training set and test set 
+
+```{r}
+data <- read.csv("output/dtm+stm.csv")
+
+library(caret)
+
+data$Sentiment <- as.factor(data$Sentiment)
+set.seed(12)
+
+# balanced partition
+test.index <- createDataPartition(data$Sentiment, p = 0.2, list = F)
+test <- data[test.index,]
+train <- data[-test.index,]
+write.csv(test, "test.csv")
+write.csv(train, "train.csv")
+```
