@@ -22,3 +22,23 @@ train <- data[-test.index,]
 write.csv(test, "test.csv")
 write.csv(train, "train.csv")
 ```
+
+```{r}
+sub_data <- read.csv("output/sub.csv")
+sub_data[,8] <- rep("Positive", nrow(sub_data))
+colnames(sub_data)[8] <- "Sentiment"
+sub_data$Sentiment[sub_data$stars_y == 3] <- "Neutral"
+sub_data$Sentiment[sub_data$stars_y < 3] <- "Negative"
+head(sub_data, 20)[, "Sentiment"]
+
+sub_data$Sentiment <- as.factor(sub_data$Sentiment)
+set.seed(12)
+
+# balanced partition
+test.index <- createDataPartition(sub_data$Sentiment, p = 0.2, list = F)
+test <- sub_data[test.index,]
+train <- sub_data[-test.index,]
+write.csv(test, "sub_test.csv")
+write.csv(train, "sub_train.csv")
+```
+
